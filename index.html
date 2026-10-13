@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="GIS work product portfolio of Jack Guirey: Great Lakes web apps, dashboards, cartography, story maps, ISA database layers, and Python workflows.">
+<style>
+  :root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<title>Jack Guirey GIS Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a chart-collar header, an about block, then project "plates" — screenshot left, notes right — grouped by work-product type. */
+:root {
+  --paper: #f5f7f8;
+  --sheet: #ffffff;
+  --ink: #12263a;
+  --ink-soft: #4a5d70;
+  --rule: #d5dde4;
+  --water: #1f5f8b;
+  --water-tint: #e3eef5;
+  --buoy: #d9622b;
+  --placeholder: #fbf3ec;
+  --code-bg: #0f2233;
+  --code-fg: #d7e6f2;
+  --land: #ffffff;
+  --lake: #d3e4ef;
+  --land-other: #edf1f4;
+  --na: #9fb6c8;
+  --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --font-body: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0d1a26; --ink: #e6eef5; --ink-soft: #9fb3c5; --rule: #233a4f;
+    --water: #6fb3e0; --water-tint: #16304a; --buoy: #f08a55; --placeholder: #2a2019;
+    --code-bg: #08131d; --code-fg: #d7e6f2; --land: #22394e; --land-other: #172a3b; --lake: #0a1621; --na: #4f6a82; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0d1a26; --ink: #e6eef5; --ink-soft: #9fb3c5; --rule: #233a4f;
+  --water: #6fb3e0; --water-tint: #16304a; --buoy: #f08a55; --placeholder: #2a2019;
+  --code-bg: #08131d; --code-fg: #d7e6f2; --land: #22394e; --land-other: #172a3b; --lake: #0a1621; --na: #4f6a82; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  padding-inline: 16px;
+}
+a { color: var(--water); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--buoy); outline-offset: 3px; }
+.wrap { max-width: 1120px; margin-inline: auto; }
+
+/* Collar: like the marginal information on a chart sheet */
+.collar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  margin-inline: -16px; padding: 10px 16px;
+}
+.collar .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; }
+.collar .mark { font-family: var(--font-display); font-size: 1.35rem; line-height: 1; color: var(--ink); text-decoration: none; }
+.collar nav { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.collar nav a {
+  font-family: var(--font-mono); font-size: .75rem; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-soft); text-decoration: none; padding-block: 4px;
+}
+.collar nav a:hover { color: var(--water); }
+
+/* Hero / about */
+.hero { padding-block: 64px 48px; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 48px; align-items: end; border-bottom: 1px solid var(--rule); }
+.eyebrow { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--water); margin: 0 0 16px; }
+.hero h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(3rem, 8vw, 5.75rem); line-height: .95; margin: 0 0 20px; letter-spacing: -.01em; }
+.hero h1 em { color: var(--water); }
+.hero .role { font-size: 1.15rem; color: var(--ink-soft); margin: 0; max-width: 34ch; }
+.extent { font-family: var(--font-mono); font-size: .8rem; color: var(--ink-soft); border-left: 2px solid var(--water); padding-left: 16px; display: grid; gap: 6px; }
+.extent b { color: var(--ink); font-weight: 500; }
+
+.about { padding-block: 48px; display: grid; justify-items: center; gap: 32px; }
+.about h2, .section-head h2 { font-family: var(--font-display); font-weight: 400; font-size: 2.25rem; line-height: 1.05; margin: 0; text-wrap: balance; }
+.about .body { width: 100%; max-width: 68ch; display: grid; gap: 16px; }
+.about .body p { margin: 0; }
+.about-facts { border-top: 1px solid var(--rule); padding-top: 16px; gap: 10px 18px; }
+
+/* Placeholder text you will replace */
+.todo {
+  background: var(--placeholder); border: 1px dashed var(--buoy); border-radius: 4px;
+  padding: 14px 16px; color: var(--ink-soft); font-size: .95rem; margin: 0;
+}
+.todo::before { content: "Placeholder · "; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--buoy); }
+
+/* Sections */
+section.group { padding-block: 56px 16px; }
+.section-head { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 32px; margin-bottom: 32px; }
+.section-head p { margin: 0; color: var(--ink-soft); max-width: 60ch; align-self: end; }
+
+/* Project plate */
+.shot { display: block; border: 1px solid var(--rule); background: var(--water-tint); overflow: hidden; border-radius: 3px; }
+.shot img { display: block; width: 100%; height: auto; transition: transform .4s ease; }
+.shot:hover img { transform: scale(1.015); }
+@media (prefers-reduced-motion: reduce) { .shot img { transition: none; } }
+.shot figcaption { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-soft); padding: 6px 10px; border-top: 1px solid var(--rule); background: var(--paper); }
+figure { margin: 0; min-width: 0; }
+.notes { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.notes h3 { font-family: var(--font-display); font-weight: 400; font-size: 1.85rem; line-height: 1.1; margin: 0; text-wrap: balance; }
+.meta { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 14px; margin: 0; font-size: .85rem; }
+.meta dt { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); padding-top: 3px; }
+.meta dd { margin: 0; }
+.open {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 600; font-size: .9rem; text-decoration: none;
+  color: var(--paper); background: var(--ink); padding: 9px 16px; border-radius: 3px;
+}
+.open:hover { background: var(--water); }
+.open span { font-family: var(--font-mono); }
+
+
+/* Project blocks: title + details, then image and link, then description, all centered */
+.plate { display: flex; flex-direction: column; align-items: center; gap: 22px; padding-block: 44px; border-top: 1px solid var(--rule); text-align: center; }
+.plate > figure, .plate > .atlas { width: 100%; max-width: 920px; }
+.plate > .explorer { width: 100%; text-align: left; }
+.plate-head { display: grid; justify-items: center; gap: 14px; max-width: 100%; }
+.plate-head h3 { font-family: var(--font-display); font-weight: 400; font-size: 2rem; line-height: 1.1; margin: 0; text-wrap: balance; }
+.plate-head .meta { text-align: left; max-width: 640px; }
+.open-row { margin: 0; }
+.desc { width: 100%; max-width: 68ch; display: grid; gap: 14px; text-align: left; }
+.desc p { margin: 0; }
+.qa-list { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.qa-list b { font-weight: 600; }
+.desc .note { font-size: .9rem; color: var(--ink-soft); border-left: 2px solid var(--water); padding-left: 12px; }
+.plate pre.code { text-align: left; }
+.atlas .wide { grid-column: 1 / -1; justify-self: center; width: min(100%, 600px); }
+.pipeline.centered { width: 100%; max-width: 640px; text-align: left; }
+.section-head { display: grid; justify-items: center; text-align: center; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.section-head p { align-self: auto; }
+/* Section title band: heavy rules above and below, bold blue title */
+.section-head { width: 100%; border-top: 3px solid var(--water); border-bottom: 3px solid var(--water); padding-block: 20px; }
+.section-head h2 { color: var(--water); font-weight: 700; }
+.section-head + .plate { border-top: 0; }
+
+/* Code cards for notebooks and scripts */
+pre.code {
+  margin: 0; background: var(--code-bg); color: var(--code-fg); border-radius: 3px;
+  font-family: var(--font-mono); font-size: .78rem; line-height: 1.55; padding: 16px 18px;
+  overflow-x: auto; border: 1px solid var(--rule);
+}
+pre.code .c { color: #7f9bb3; }
+pre.code .k { color: #8cc8f0; }
+pre.code .s { color: #f2b48c; }
+.codefig figcaption { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-soft); padding-top: 6px; }
+.empty-shot {
+  display: grid; place-items: center; aspect-ratio: 16 / 9; max-width: 100%;
+  border: 1px dashed var(--rule); border-radius: 3px; color: var(--ink-soft);
+  font-family: var(--font-mono); font-size: .8rem; text-align: center; padding: 16px;
+}
+
+/* Cartography atlas */
+.atlas { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.atlas .tall { grid-row: span 2; }
+.sheet .zoom { display: block; width: 100%; padding: 0; border: 1px solid var(--rule); background: #ffffff; cursor: zoom-in; border-radius: 3px; overflow: hidden; }
+.sheet .zoom img { display: block; width: 100%; height: auto; transition: transform .4s ease; }
+.sheet .zoom:hover img { transform: scale(1.015); }
+@media (prefers-reduced-motion: reduce) { .sheet .zoom img { transition: none; } }
+.sheet figcaption { font-size: .8rem; color: var(--ink-soft); padding-top: 8px; }
+.sheet figcaption b { color: var(--ink); font-weight: 600; }
+dialog#lightbox { border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 96vh; overflow: visible; }
+dialog#lightbox::backdrop { background: rgba(8, 18, 28, .88); }
+dialog#lightbox img { display: block; max-width: 96vw; max-height: 90vh; width: auto; height: auto; background: #ffffff; }
+dialog#lightbox .close { display: block; margin: 0 0 8px auto; font: 600 .85rem var(--font-body); color: #ffffff; background: transparent; border: 1px solid rgba(255,255,255,.5); border-radius: 3px; padding: 6px 12px; cursor: pointer; }
+
+/* Databases & data structures */
+.pipeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: step; align-self: start; }
+.pipeline li { counter-increment: step; display: grid; grid-template-columns: 2.2rem minmax(0, 1fr); column-gap: 12px; padding-block: 10px; border-bottom: 1px solid var(--rule); font-size: .9rem; }
+.pipeline li:first-child { border-top: 1px solid var(--rule); }
+.pipeline li::before { content: counter(step, decimal-leading-zero); grid-row: span 2; font-family: var(--font-mono); font-size: .75rem; color: var(--water); padding-top: 2px; }
+.pipeline b { font-weight: 600; }
+.pipeline span { color: var(--ink-soft); }
+.num { font-variant-numeric: tabular-nums; }
+
+.explorer { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
+.map-wrap { min-width: 0; border: 1px solid var(--rule); border-radius: 3px; background: var(--water-tint); position: relative; }
+#bac-map { display: block; width: 100%; aspect-ratio: 1 / 1.05; cursor: crosshair; }
+.map-hint { position: absolute; left: 12px; bottom: 10px; margin: 0; font-family: var(--font-mono); font-size: .7rem; color: var(--ink-soft); background: var(--paper); padding: 4px 8px; border-radius: 2px; }
+.record { min-width: 0; border: 1px solid var(--rule); border-radius: 3px; padding: 18px 20px; background: var(--paper); align-self: start; }
+.record .eyebrow { margin-bottom: 6px; }
+.record h4 { font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; line-height: 1.1; margin: 0 0 14px; }
+.rec-fields { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 3px 14px; margin: 0; font-size: .82rem; }
+.rec-fields dt { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-soft); padding-top: 2px; }
+.rec-fields dd { margin: 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.rec-fields dd.na { color: var(--ink-soft); }
+
+h3.sub { font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; margin: 48px 0 12px; }
+.sub-note { margin: -4px 0 16px; color: var(--ink-soft); font-size: .9rem; max-width: 70ch; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 3px; }
+table.dict { border-collapse: collapse; width: 100%; font-size: .85rem; min-width: 640px; }
+.dict th { text-align: left; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); background: var(--water-tint); padding: 10px 14px; }
+.dict td { padding: 8px 14px; border-top: 1px solid var(--rule); vertical-align: top; }
+.dict td:first-child { font-family: var(--font-mono); font-size: .8rem; color: var(--water); white-space: nowrap; }
+.dict td:nth-child(2) { font-family: var(--font-mono); font-size: .75rem; color: var(--ink-soft); white-space: nowrap; }
+.dict td:last-child { font-variant-numeric: tabular-nums; }
+
+
+footer { border-top: 1px solid var(--rule); margin-top: 48px; padding-block: 24px 40px; font-family: var(--font-mono); font-size: .75rem; color: var(--ink-soft); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+
+@media (max-width: 820px) {
+  .hero, .about { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .hero { padding-block: 40px 32px; }
+  .atlas { grid-template-columns: minmax(0, 1fr); }
+  .atlas .tall { grid-row: auto; }
+  .explorer { grid-template-columns: minmax(0, 1fr); }
+}
+</style>
+
+<header class="collar">
+  <div class="wrap">
+    <a class="mark" href="#top">Jack Guirey</a>
+    <nav aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#maps">Cartography</a>
+      <a href="#apps">Applications</a>
+      <a href="#dashboards">Dashboards</a>
+      <a href="#stories">Story maps</a>
+      <a href="#data">Data</a>
+      <a href="#automation">Automation</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow">GIS work product portfolio</p>
+      <h1>Jack <em>Guirey</em></h1>
+      <p class="role">GIS Data Analyst · Great Lakes Commission</p>
+    </div>
+    <div class="extent" aria-label="Portfolio summary">
+      <div><b>Products</b> 4 print maps · 3 web apps · 2 dashboards · 1 story map collection · 1 ISA database layer · 3 code workflows</div>
+      <div><b>Platforms</b> ArcGIS Online · Experience Builder · Survey123 · Power BI · Python</div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ME: replace the placeholder paragraph(s) below ===== -->
+  <section class="about" id="about">
+    <div class="section-head">
+      <h2>About me</h2>
+    </div>
+    <div class="body">
+      <p>I'm a GIS professional with experience designing and managing enterprise geodatabases, running geospatial analysis, and building maps and applications that support environmental and conservation planning. My background spans conservation, land management, urban development, and public-sector mapping.</p>
+      <p>As a GIS Data Analyst at the Great Lakes Commission, I manage geospatial data and build GIS products for environmental planning across the Great Lakes region. That work includes designing geodatabases, building internal and public-facing apps in ArcGIS Experience Builder, publishing and maintaining web services in ArcGIS Online and Enterprise, and producing standardized map and data products for the EPA Inland Sensitivity Atlas, which federal and state partners use for environmental emergency response planning.</p>
+      <p>Before joining the GLC, I administered enterprise GIS databases (ArcGIS Pro, SQL Server) at Bedrock Real Estate in Detroit, where I also built a workflow to turn CAD files into 3D building models. For my master's capstone at the University of Michigan, I was the GIS specialist on a team working with the National Park Service to design a conceptual trail network through a sensitive Lake Michigan dune landscape near South Haven.</p>
+      <dl class="meta about-facts">
+        <dt>Education</dt><dd>M.S., University of Michigan School for Environment and Sustainability, 2023<br>B.S., Environmental Science and Sustainability, Northern Michigan University, 2021</dd>
+        <dt>Experience</dt><dd>Great Lakes Commission · Bedrock Real Estate · University of Michigan / National Park Service capstone · Charlevoix County</dd>
+        <dt>Tools</dt><dd>ArcGIS Pro, Online, Enterprise &amp; Experience Builder · SQL Server / SDE · Python · SQL · R · Power BI · AutoCAD / Civil 3D · Adobe Creative Suite</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===================== CARTOGRAPHY ===================== -->
+  <section class="group" id="maps">
+    <div class="section-head">
+      <h2>Cartography</h2>
+      <p>Print-ready conceptual trail maps from my master's capstone with the National Park Service. Select any map to view it full size.</p>
+    </div>
+
+    <article class="plate">
+      <header class="plate-head">
+        <h3>Legacy Dune Trail Concept</h3>
+        <dl class="meta">
+          <dt>Type</dt><dd>Cartography · planning analysis</dd>
+          <dt>Built with</dt><dd>ArcGIS Pro, ArcGIS Online</dd>
+          <dt>Partners</dt><dd>National Park Service RTCA, Southwest Michigan Land Conservancy, U-M SEAS</dd>
+          <dt>Projection</dt><dd>NAD 1983 StatePlane Michigan South FIPS 2113 (US feet)</dd>
+        </dl>
+      </header>
+      <div class="desc">
+        <!-- DESCRIPTION: NPS master's capstone maps -->
+        <p>For my master's capstone at the University of Michigan School for Environment and Sustainability, I was the GIS specialist on a graduate team that worked directly with National Park Service staff and the Southwest Michigan Land Conservancy. We designed a conceptual trail network across a sensitive dune landscape on Lake Michigan near South Haven, linking Van Buren State Park, Syndicate Dunes, Porter Legacy Dunes, and Pilgrim Haven Natural Area.</p>
+        <p>I worked with NPS resource staff to bring ecological and land-management considerations into the trail design, which helped us develop alternatives that limited impacts to sensitive dune resources. I produced these maps, an ArcGIS web map, and trail concept renderings so NPS and conservancy partners could compare trail configurations and weigh resource-management tradeoffs. I also co-authored the final project report and client deliverables.</p>
+      </div>
+    <div class="atlas">
+      <figure class="sheet tall">
+        <button type="button" class="zoom" data-full="img/nps_legacy_dune.jpg" aria-label="View Legacy Dune Trail map full size">
+          <img src="img/nps_legacy_dune.jpg" alt="Legacy Dune Trail conceptual trail map: numbered trail segments along the Lake Michigan shoreline from Van Buren State Park north to Pilgrim Haven, with amenity symbols, segment mileage table, and locator inset" loading="lazy">
+        </button>
+        <figcaption><b>Legacy Dune Trail</b> · full conceptual route with segment mileage and amenities</figcaption>
+      </figure>
+      <figure class="sheet">
+        <button type="button" class="zoom" data-full="img/nps_syndicate_concept.jpg" aria-label="View Syndicate Dunes Park map full size">
+          <img src="img/nps_syndicate_concept.jpg" alt="Syndicate Dunes Park conceptual trail map with contours over aerial imagery, proposed trails, dune stairs, and viewpoint" loading="lazy">
+        </button>
+        <figcaption><b>Syndicate Dunes Park</b> · proposed trails over contours and aerial imagery</figcaption>
+      </figure>
+      <figure class="sheet">
+        <button type="button" class="zoom" data-full="img/nps_syndicate_options.jpg" aria-label="View Syndicate Dunes trail options map full size">
+          <img src="img/nps_syndicate_options.jpg" alt="Possible Syndicate Dunes trail options map comparing four alignments against county and private parcel boundaries" loading="lazy">
+        </button>
+        <figcaption><b>Syndicate Dunes trail options</b> · four alignments compared against land ownership</figcaption>
+      </figure>
+      <figure class="sheet wide">
+        <button type="button" class="zoom" data-full="img/nps_porter_pilgrim.jpg" aria-label="View Porter Dunes and Pilgrim Haven map full size">
+          <img src="img/nps_porter_pilgrim.jpg" alt="Porter Dunes and Pilgrim Natural Area map with USGS elevation contours, existing Pilgrim Haven trails, and a proposed trail" loading="lazy">
+        </button>
+        <figcaption><b>Porter Dunes &amp; Pilgrim Haven</b> · proposed trail against USGS contours</figcaption>
+      </figure>
+    </div>
+    </article>
+  </section>
+
+  <dialog id="lightbox" aria-label="Full-size map">
+    <button type="button" class="close" id="lightbox-close">Close ✕</button>
+    <img id="lightbox-img" alt="">
+  </dialog>
+
+  <!-- ===================== APPLICATIONS ===================== -->
+  <section class="group" id="apps">
+    <div class="section-head">
+      <h2>Web maps &amp; applications</h2>
+      <p>Public-facing ArcGIS Experience Builder apps built on hosted feature layers, with filtering, charts, and field-data entry.</p>
+    </div>
+
+    <article class="plate">
+      <header class="plate-head">
+        <h3>Current GLSNRP Projects</h3>
+        <dl class="meta">
+          <dt>Type</dt><dd>Web application · interactive map</dd>
+          <dt>Built with</dt><dd>ArcGIS Experience Builder, ArcGIS Online</dd>
+          <dt>Program</dt><dd>Great Lakes Sediment and Nutrient Reduction Program, 2022–2025</dd>
+        </dl>
+      </header>
+      <div class="desc">
+        <!-- DESCRIPTION: GLSNRP Projects Map -->
+        <p>The Great Lakes Sediment and Nutrient Reduction Program (GLSNRP) awards competitive grants to state and local governments and nonprofit organizations for erosion and sediment control projects across the Great Lakes basin. The program has been funded by the Great Lakes Restoration Initiative since 2010, and it supports innovative projects that other U.S. EPA and USDA cost-share programs typically don't fund.</p>
+        <p>I built this public web app to show where current grant dollars are going. Each funded project has a representative point location, linked to the HUC-12 watershed(s) it affects. Users can search and filter by organization or project title, and a chart summarizes total awards by state.</p>
+      </div>
+      <figure>
+        <a class="shot" href="https://experience.arcgis.com/experience/f1436d6a24e34d0e9d0321ac47b15ebc" target="_blank" rel="noopener">
+          <img src="img/glsnrp.jpg" alt="Current GLSNRP Projects app: map of 2022–2025 grant locations across the Great Lakes with filter panel and a pie chart of awards by state" loading="lazy">
+          <figcaption>Grant locations, project watersheds, attribute filters, awards by state</figcaption>
+        </a>
+      </figure>
+      <p class="open-row"><a class="open" href="https://experience.arcgis.com/experience/f1436d6a24e34d0e9d0321ac47b15ebc" target="_blank" rel="noopener">Open app <span>↗</span></a></p>
+    </article>
+
+    <article class="plate">
+      <header class="plate-head">
+        <h3>Mussel Control Mapping Tool</h3>
+        <dl class="meta">
+          <dt>Type</dt><dd>Web application · field / mobile data collection</dd>
+          <dt>Built with</dt><dd>ArcGIS Experience Builder, ArcGIS Online, Survey123, Python</dd>
+          <dt>Data</dt><dd>Lake Huron &amp; Lake Michigan bathymetry, control research sites, deployment records</dd>
+        </dl>
+      </header>
+      <div class="desc">
+        <!-- DESCRIPTION: Mussel Control Mapping Tool -->
+        <p>I designed and developed an interactive GIS mapping tool to support Great Lakes invasive mussel control efforts and protect critically endangered whitefish spawning reefs. Using ArcGIS Experience Builder and ArcGIS Online, I built an application that centralizes field-reported control equipment locations, allowing users to visualize, locate, and track gear deployments.</p>
+        <p>I also developed a Python-based data management workflow using the ArcGIS API for Python and pandas to integrate Survey123 submissions and spreadsheet data, automate hosted feature layer updates, and prevent duplicate records. This tool streamlines collaboration among field teams and provides a centralized resource for coordinating invasive mussel control activities.</p>
+        <p class="note">The version linked here is a copy of the original tool. The layer showing placed field equipment contains sensitive location data, so it has been removed from this copy for privacy reasons.</p>
+      </div>
+      <figure>
+        <a class="shot" href="https://experience.arcgis.com/experience/17561e3701734a42821bbe7c117f94b5" target="_blank" rel="noopener">
+          <img src="img/mussel.jpg" alt="Mussel Control Mapping Tool: dark basemap with Lake Huron and Lake Michigan bathymetry and research project sites" loading="lazy">
+          <figcaption>Bathymetry, research sites, Survey123 forms, spreadsheet upload</figcaption>
+        </a>
+      </figure>
+      <p class="open-row"><a class="open" href="https://experience.arcgis.com/experience/17561e3701734a42821bbe7c117f94b5" target="_blank" rel="noopener">Open app <span>↗</span></a></p>
+    </article>
+  </section>
+
+  <!-- ===================== DASHBOARDS ===================== -->
+  <section class="group" id="dashboards">
+    <div class="section-head">
+      <h2>Dashboards</h2>
+      <p>Linked map, list, and chart views for exploring program participation and regional data.</p>
+    </div>
+
+    <article class="plate">
+      <header class="plate-head">
+        <h3>Green Marine Voluntary Certification for Ports</h3>
+        <dl class="meta">
+          <dt>Type</dt><dd>Dashboard · web application</dd>
+          <dt>Built with</dt><dd>ArcGIS Experience Builder, ArcGIS Online · hosted on gis.glc.org</dd>
+          <dt>Features</dt><dd>Port search, performance-level tabs, built-in 8-step tutorial</dd>
+        </dl>
+      </header>
+      <div class="desc">
+        <!-- DESCRIPTION: Green Marine -->
+        <p>I developed an interactive GIS mapping application to visualize ports participating in Green Marine, a voluntary environmental certification program for the maritime industry that encourages ports, shipowners, and other marine transportation stakeholders to measure and improve their environmental performance.</p>
+        <p>Using ArcGIS Experience Builder and ArcGIS Online, I configured interactive web maps and data layers to help users explore participating ports across the Great Lakes and understand their involvement in the program. I focused on application development, data integration, interface configuration, and troubleshooting to create an accessible mapping resource that communicates the program's reach and supports awareness of environmental sustainability efforts across the maritime sector.</p>
+      </div>
+      <figure>
+        <a class="shot" href="https://gis.glc.org/Green-Marine/?page=Page&amp;views=Green-Marine" target="_blank" rel="noopener">
+          <img src="img/greenmarine.jpg" alt="Green Marine Voluntary Certification for Ports dashboard: basin map of participating ports with port selector and performance level panels" loading="lazy">
+          <figcaption>Participating ports, port selector, performance levels, participation views</figcaption>
+        </a>
+      </figure>
+      <p class="open-row"><a class="open" href="https://gis.glc.org/Green-Marine/?page=Page&amp;views=Green-Marine" target="_blank" rel="noopener">Open dashboard <span>↗</span></a></p>
+    </article>
+
+    <article class="plate">
+      <header class="plate-head">
+        <h3>Agriculture in the Great Lakes</h3>
+        <dl class="meta">
+          <dt>Type</dt><dd>Dashboard · analysis</dd>
+          <dt>Built with</dt><dd>Microsoft Power BI</dd>
+          <dt>Features</dt><dd>Clip-to-basin toggle, source notes on every visual</dd>
+        </dl>
+      </header>
+      <div class="desc">
+        <!-- DESCRIPTION: Agriculture in the Great Lakes (Power BI) -->
+        <p>In 2024 the Great Lakes Commission adopted a policy resolution on agriculture and water use under changing climate conditions. With support from The Joyce Foundation, GLC staff worked with experts across the region on three questions: what agricultural production in the basin looks like today, what might be grown under future climate conditions, and how agricultural water use could change.</p>
+        <p>This dashboard is the product of the first phase. It lets users explore baseline conditions for crops, livestock, land cover, water use, and climate across the basin, along with recent patterns of change. It was built as a companion to the GLC report <em>Impacts on Great Lakes agriculture and water use under changing climate conditions</em>. The next phase of the project looks ahead to mid-century, focusing on the most water-intensive crops and how irrigation demand may shift.</p>
+        <p><a href="https://www.glc.org/work/agriculture" target="_blank" rel="noopener">Project page on glc.org ↗</a></p>
+      </div>
+      <figure>
+        <a class="shot" href="https://app.powerbi.com/view?r=eyJrIjoiOTg3NjYzMTQtNTkzYi00NjdjLTk4OTEtMmFmNjkyZjM1Njk5IiwidCI6ImNhZjliYjJkLTlhOTUtNDUwMS05MWNjLTBjNzMzN2UzODYxNCIsImMiOjN9&amp;pageName=54a73093926da9b3c15c" target="_blank" rel="noopener">
+          <img src="img/powerbi.jpg" alt="Agriculture in the Great Lakes Power BI report: landing page with Commodity, Jurisdiction, Watershed and Climate navigation" loading="lazy">
+          <figcaption>11-page report · explore by commodity, jurisdiction, watershed, climate</figcaption>
+        </a>
+      </figure>
+      <p class="open-row"><a class="open" href="https://app.powerbi.com/view?r=eyJrIjoiOTg3NjYzMTQtNTkzYi00NjdjLTk4OTEtMmFmNjkyZjM1Njk5IiwidCI6ImNhZjliYjJkLTlhOTUtNDUwMS05MWNjLTBjNzMzN2UzODYxNCIsImMiOjN9&amp;pageName=54a73093926da9b3c15c" target="_blank" rel="noopener">Open dashboard <span>↗</span></a></p>
+    </article>
+  </section>
+
+  <!-- ===================== STORY MAPS ===================== -->
+  <section class="group" id="stories">
+    <div class="section-head">
+      <h2>Story maps</h2>
+      <p>Narrative maps that pair project data with photos and context for a general audience.</p>
+    </div>
+
+    <article class="plate">
+      <header class="plate-head">
+        <h3>Habitat Restoration in Great Lakes Areas of Concern</h3>
+        <dl class="meta">
+          <dt>Type</dt><dd>Story map collection</dd>
+          <dt>Built with</dt><dd>ArcGIS StoryMaps</dd>
+          <dt>Program</dt><dd>NOAA–GLC Regional Habitat Restoration Partnership</dd>
+        </dl>
+      </header>
+      <div class="desc">
+        <!-- DESCRIPTION: Habitat Restoration StoryMaps -->
+        <p>Areas of Concern (AOCs) are Great Lakes watersheds with degraded environmental conditions from historic and ongoing pollution, designated under the U.S.–Canada Great Lakes Water Quality Agreement. Since 2008, the Great Lakes Commission and NOAA have partnered to design, build, and monitor high-priority habitat restoration projects in these AOCs, with funding from the Great Lakes Restoration Initiative. As of 2024, the partnerships total more than $70 million, covering 45 multi-phase projects in eight AOCs.</p>
+        <p>I created this ArcGIS StoryMaps collection to share the partnership's work with the public. It contains three story maps, for the Maumee River, Niagara River, and Muskegon Lake AOCs, each presenting project details and highlights. A locator map ties them together so readers can move between sites across the basin.</p>
+      </div>
+      <figure>
+        <a class="shot" href="https://storymaps.arcgis.com/collections/6e257aaa2b884b06810e6a31cc26cbe9" target="_blank" rel="noopener">
+          <img src="img/storymap.jpg" alt="Habitat Restoration in Great Lakes Areas of Concern story map collection with Maumee River AOC card and a locator map of AOCs" loading="lazy">
+          <figcaption>Maumee River, Niagara River, and Muskegon Lake AOC story maps with a locator map</figcaption>
+        </a>
+      </figure>
+      <p class="open-row"><a class="open" href="https://storymaps.arcgis.com/collections/6e257aaa2b884b06810e6a31cc26cbe9" target="_blank" rel="noopener">Open collection <span>↗</span></a></p>
+    </article>
+  </section>
+
+  <!-- ===================== DATABASES & DATA STRUCTURES ===================== -->
+  <section class="group" id="data">
+    <div class="section-head">
+      <h2>Databases &amp; data structures</h2>
+      <p>A statewide point layer built to the EPA Region 5 Inland Sensitivity Atlas (ISA) data standard, used by federal and state partners for environmental emergency response planning.</p>
+    </div>
+
+    <article class="plate">
+      <header class="plate-head">
+        <h3>Boating Access Sites · Michigan</h3>
+        <dl class="meta">
+          <dt>Type</dt><dd>Point feature class · ISA standard schema</dd>
+          <dt>Records</dt><dd><span class="num" data-stat="count">2,988</span> sites · 19 attribute fields</dd>
+          <dt>Verified</dt><dd>June 15, 2026 (VERIF_DATE)</dd>
+          <dt>Built with</dt><dd>ArcGIS Pro, Python, BAC Web Scraper</dd>
+        </dl>
+      </header>
+      <div class="desc">
+        <!-- DESCRIPTION: ISA Boating Access Sites layer (sources: ISA Reference Manual v4, 2015) -->
+        <p>The Inland Sensitivity Atlas is a series of GIS map products developed by U.S. EPA Region 5 to support hazardous materials spill contingency planning and response under the Oil Pollution Act of 1990. The atlases document environmentally sensitive resources, sensitive human-use resources, potential spill sources, and response features. The Great Lakes Commission maintains the data for Michigan, Ohio, and Indiana, updating one state at a time.</p>
+        <p>The boat access layer maps concrete, asphalt, gravel, and earthen ramps, which can give responders important access to the water during a spill. Ramp locations appear on the atlas PDF maps, and the full records live in the GIS database.</p>
+        <p>For each layer I update, including this one, I follow the ISA Reference Manual. I compare the existing atlas data record by record against current sources, add new sources where they fill gaps (for boat access, the BAC Web Scraper), and format every record to the ISA data entry standards: no field left blank, N/A where information is unavailable, and consistent naming and phone formats. Each feature gets a 1–5 accuracy rating and a verification date. Before delivery, internal QA/QC confirms the data structure and field names, that every feature has a complete attribute record, attribute accuracy and spelling, positional accuracy (within ±820 ft at minimum, with ±82 ft as the goal), and current metadata.</p>
+        <p>My QA/QC combines scripted checks with comparison against authoritative sources. Techniques I use include:</p>
+        <ul class="qa-list">
+          <li><b>Schema and format checks.</b> Python scripts test every record against the manual's field structure: field names, types, and widths, no empty fields, correct use of N/A, and standard phone and name formats.</li>
+          <li><b>Cross-field consistency.</b> Related fields must agree: the map icon letter matches the symbol code, the numeric and text reference numbers match, each agency has one contact number, and emergency numbers are consistent within each county.</li>
+          <li><b>Duplicate and coverage checks.</b> New records are compared with the existing layer by source agency and area, not just by name, so overlapping features are caught before they are added. Same-name features in one county get a direction suffix, such as "Sawmill Creek (Marquette N)".</li>
+          <li><b>Comparison with authoritative data.</b> I overlay features with PAD-US and Michigan DNR managed lands to confirm ownership, check names and outlines against USGS GNIS, and compare areas with Census figures.</li>
+          <li><b>Source verification.</b> Species names are checked against ITIS and federal listing status against USFWS ECOS. Errors found in source data, such as reused ID numbers or stray geometry, are documented so they can be reported to the source agency.</li>
+          <li><b>Geometry review.</b> Data is projected to Michigan GeoRef, slivers and gaps are cleaned, and features are reviewed against aerial imagery.</li>
+          <li><b>Verify or omit.</b> If a record can't be verified, it is left out and the reason is documented, rather than added with uncertain information.</li>
+        </ul>
+      </div>
+    <div class="explorer">
+      <div class="map-wrap">
+        <canvas id="bac-map" aria-label="Map of 2,988 boating access sites across Michigan. Select a site to see its record." role="img"></canvas>
+        <p class="map-hint">Select any site to see its full ISA record</p>
+      </div>
+      <aside class="record" aria-live="polite">
+        <p class="eyebrow">Selected record</p>
+        <h4 id="rec-title">Stevenson Lake</h4>
+        <dl id="rec-body" class="rec-fields"></dl>
+      </aside>
+    </div>
+      <!-- Workflow: each step is a real stage in building the layer -->
+      <ol class="pipeline centered" aria-label="How the layer was built">
+        <li><b>Collect</b><span>Site records gathered with the <a href="#scraper">BAC Web Scraper</a> and other sources</span></li>
+        <li><b>Normalize</b><span>Fields mapped to the ISA schema; missing values set to N/A</span></li>
+        <li><b>Assign</b><span>Reference numbers and the ISA map symbol (412) added to each site</span></li>
+        <li><b>QA/QC</b><span>Scripted schema and consistency checks, duplicate checks, and comparison with authoritative sources</span></li>
+        <li><b>Deliver</b><span>Published as an ISA layer for EPA Region 5 partners</span></li>
+      </ol>
+    </article>
+
+    <h3 class="sub">Data dictionary</h3>
+    <!-- Descriptions follow ISA Reference Manual v4 (2015) Table 10; OPEN, CLOSED, RISK_CLOSE, RIVER_GAGE, PARKING_CA are not in Table 10 -->
+    <div class="table-scroll">
+      <table class="dict">
+        <thead>
+          <tr><th>Field</th><th>Type</th><th>Description</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>FACIL_NAME</td><td>Text (75)</td><td>Name of boat access facility</td><td>Stevenson Lake</td></tr>
+          <tr><td>REF_NUMBER</td><td>Double (19, 11)</td><td>Unique reference number for each site, in number format</td><td>3.009036</td></tr>
+          <tr><td>REF_TEMP</td><td>Text (10)</td><td>Unique reference number for each site, in text format</td><td>0.009036</td></tr>
+          <tr><td>ADDRESS</td><td>Text (100)</td><td>Address location of the ramp</td><td>8200 N. Whiteville Rd., Clare, MI 48617</td></tr>
+          <tr><td>OPERATOR</td><td>Text (75)</td><td>Agency or company that maintains the ramp</td><td>Clare Field Office</td></tr>
+          <tr><td>CONTACT</td><td>Text (50)</td><td>Contact information for the entity that maintains the ramp</td><td>989-426-9205</td></tr>
+          <tr><td>OPEN</td><td>Double (19, 11)</td><td>Site status field from the ISA schema</td><td>0</td></tr>
+          <tr><td>CLOSED</td><td>Double (19, 11)</td><td>Site status field from the ISA schema</td><td>0</td></tr>
+          <tr><td>RISK_CLOSE</td><td>Double (19, 11)</td><td>Site status field from the ISA schema</td><td>0</td></tr>
+          <tr><td>WATERBODY</td><td>Text (254)</td><td>Waterbody at the ramp, plus other waterbodies within ½ mi. accessible by boat</td><td>Lake Superior</td></tr>
+          <tr><td>TYPE</td><td>Text (35)</td><td>Type of ramp</td><td>A gravel-surfaced ramp</td></tr>
+          <tr><td>RIVER_GAGE</td><td>Text (50)</td><td>Nearby National Weather Service river gage ID, or N/A</td><td>SLVM4</td></tr>
+          <tr><td>LONGITUDE</td><td>Double (19, 11)</td><td>Longitude of ramp in decimal degrees</td><td>-84.8284</td></tr>
+          <tr><td>LATITUDE</td><td>Double (19, 11)</td><td>Latitude of ramp in decimal degrees</td><td>43.7601</td></tr>
+          <tr><td>COMMENTS</td><td>Text (100)</td><td>Additional information about the ramp</td><td>A-37-003</td></tr>
+          <tr><td>SYMBOL</td><td>Long (10)</td><td>Numeric code identifying the boat access ramps theme</td><td>412</td></tr>
+          <tr><td>ACCURACY</td><td>Long (10)</td><td>Map accuracy code, 1 (excellent) to 5, from the ISA accuracy rating chart</td><td>1</td></tr>
+          <tr><td>VERIF_DATE</td><td>Date</td><td>Date on which the record accuracy was verified</td><td>2026-06-15</td></tr>
+          <tr><td>PARKING_CA</td><td>Long (10)</td><td>Parking capacity (vehicle spaces)</td><td>9</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">Data collection</h3>
+    <!-- GITHUB SCRIPT: BAC Web Scraper -->
+    <article class="plate" id="scraper">
+      <header class="plate-head">
+        <h3>Boating Access Locations (BAC) Web Scraper</h3>
+        <dl class="meta">
+          <dt>Type</dt><dd>Data acquisition · Python script</dd>
+          <dt>Built with</dt><dd>Python, Selenium, BeautifulSoup, pandas</dd>
+          <dt>Output</dt><dd>Boat_Launches.csv: Michigan boat launch names, owners, latitude/longitude, site attributes</dd>
+        </dl>
+      </header>
+      <div class="desc">
+        <!-- DESCRIPTION: BAC Web Scraper -->
+        <p>I developed a Python web scraper using Selenium, BeautifulSoup, and pandas to automate the collection of boating access location data from Outdoor Michigan. The script navigates through paginated listings, identifies individual boat launch pages, and extracts relevant attributes, including launch names, managing townships, geographic coordinates, launch types, and other site characteristics. The collected data is organized into a structured table and exported to CSV for GIS processing.</p>
+        <p>Within the EPA Region 5 Inland Sensitivity Atlas (ISA), this tool helped address a data gap in boating access locations by automating data collection that would otherwise require extensive manual research. The resulting dataset supports GIS data development, validation, and integration into the ISA, improving the availability of boating access information for emergency response planning.</p>
+      </div>
+      <figure class="codefig">
+<pre class="code"><span class="c"># Pull owner, coordinates, and site details from each launch page</span>
+<span class="k">def</span> scrape_ramp(url):
+    driver.get(url)
+    soup = BeautifulSoup(driver.page_source, <span class="s">"html.parser"</span>)
+    data = {<span class="s">"Ramp_URL"</span>: url}
+
+    lat = soup.select_one(<span class="s">"span[itemprop='latitude']"</span>)
+    lon = soup.select_one(<span class="s">"span[itemprop='longitude']"</span>)
+    <span class="k">if</span> lat <span class="k">and</span> lon:
+        data[<span class="s">"Latitude"</span>] = lat.get_text(strip=<span class="k">True</span>)
+        data[<span class="s">"Longitude"</span>] = lon.get_text(strip=<span class="k">True</span>)
+
+    <span class="k">for</span> row <span class="k">in</span> soup.select(<span class="s">"div.feature-details tr"</span>):
+        tds = row.find_all(<span class="s">"td"</span>)
+        <span class="k">if</span> len(tds) == <span class="s">2</span>:
+            key = tds[<span class="s">0</span>].get_text(strip=<span class="k">True</span>).replace(<span class="s">":"</span>, <span class="s">""</span>)
+            data[key] = tds[<span class="s">1</span>].get_text(<span class="s">" "</span>, strip=<span class="k">True</span>)
+    <span class="k">return</span> data</pre>
+        <figcaption>Excerpt · scraper.py</figcaption>
+      </figure>
+      <p class="open-row"><a class="open" href="https://github.com/jguirey777/BAC-Web-Scraper" target="_blank" rel="noopener">View on GitHub <span>↗</span></a></p>
+    </article>
+  </section>
+
+  <!-- ===================== AUTOMATION ===================== -->
+  <section class="group" id="automation">
+    <div class="section-head">
+      <h2>Automation &amp; data workflows</h2>
+      <p>Python notebooks that move field submissions into hosted feature layers and keep records consistent.</p>
+    </div>
+
+    <article class="plate">
+      <header class="plate-head">
+        <h3>Survey123 Excel Append</h3>
+        <dl class="meta">
+          <dt>Type</dt><dd>Workflow automation · ArcGIS Notebook</dd>
+          <dt>Built with</dt><dd>ArcGIS API for Python, pandas, Survey123</dd>
+          <dt>Supports</dt><dd>Mussel Control Mapping Tool, spreadsheet upload</dd>
+        </dl>
+      </header>
+      <div class="desc">
+        <!-- DESCRIPTION: Mussel_Tool_Excel_Append notebook -->
+        <p>I developed an ArcGIS Notebook using Python, the ArcGIS API for Python, and pandas to automate the integration of field data submitted through Survey123 and Excel spreadsheets into the Mussel Control Mapping Tool’s hosted GIS layers. The workflow was created to reduce manual data entry, keep equipment locations and status information up to date, and maintain consistent records for the Invasive Mussel Collaborative’s control efforts.</p>
+        <p>The notebook validates and processes incoming records, adds new equipment locations, updates existing records, and tracks processed submissions using an OBJECTID log to prevent duplicate entries. Scheduled to run approximately every 15 minutes, it helps keep the interactive Experience Builder map current and supports coordination of invasive mussel control equipment across the Great Lakes.</p>
+      </div>
+      <figure class="codefig">
+<pre class="code"><span class="c"># Read the Excel file attached to the latest Survey123 submission</span>
+df = pd.read_excel(excel_path)
+
+<span class="c"># Build point geometry from deployment coordinates</span>
+sdf = GeoAccessor.from_xy(
+    df,
+    x_column=<span class="s">'deplyment_longitude'</span>,
+    y_column=<span class="s">'deployment_lattitude'</span>,
+    sr=<span class="s">4326</span>,
+)
+
+<span class="c"># Append the new features to the target hosted layer</span>
+result = target_layer.edit_features(
+    adds=sdf.spatial.to_featureset()
+)</pre>
+        <figcaption>Excerpt · ArcGIS API for Python</figcaption>
+      </figure>
+      <p class="open-row"><a class="open" href="https://arcg.is/0a44vO1" target="_blank" rel="noopener">View notebook <span>↗</span></a></p>
+    </article>
+
+    <article class="plate">
+      <header class="plate-head">
+        <h3>Mussel Control Mapping Tool – Unique ID Generator Notebook</h3>
+        <dl class="meta">
+          <dt>Type</dt><dd>Data structure / QA workflow · ArcGIS Notebook</dd>
+          <dt>Built with</dt><dd>ArcGIS API for Python</dd>
+          <dt>Supports</dt><dd>Mussel Control Mapping Tool, three Survey123 feature layers</dd>
+        </dl>
+      </header>
+      <div class="desc">
+        <!-- DESCRIPTION: Unique ID Generator notebook -->
+        <p>I developed a Python ArcGIS Notebook to generate and manage unique identifiers for equipment tracked in the Mussel Control Mapping Tool. The notebook helped establish a consistent identification system so each piece of control equipment could be distinguished and located within the shared GIS database.</p>
+        <p>These unique IDs were incorporated into the ArcGIS Experience Builder mapping tool, allowing field teams to search for a specific piece of equipment by its ID while working in the field. This made it easier to find equipment locations, verify placement information, and coordinate equipment tracking across the Great Lakes. The tool supported the Invasive Mussel Collaborative’s efforts to manage invasive mussel control equipment and protect critically endangered whitefish spawning reefs.</p>
+      </div>
+      <figure class="codefig">
+<pre class="code"><span class="c"># Find records missing an ID in each Survey123 layer</span>
+features = layer.query(
+    where=<span class="s">f"{uid_field} IS NULL OR {uid_field} = ''"</span>,
+    out_fields=<span class="s">f"objectid, {org_field}, {date_field}, ..."</span>,
+    return_geometry=<span class="k">False</span>,
+)
+
+<span class="k">for</span> f <span class="k">in</span> features.features:
+    attrs = f.attributes
+    <span class="c"># Organization - date (lat, lon)</span>
+    attrs[uid_field] = <span class="s">f"{org} - {date} ({lat_str}, {lon_str})"</span>
+    updates.append({<span class="s">'attributes'</span>: attrs})
+
+layer.edit_features(updates=updates)</pre>
+        <figcaption>Excerpt · runs across point, snag-line, and polygon deployment layers</figcaption>
+      </figure>
+      <p class="open-row"><a class="open" href="https://arcg.is/1Gm88j7" target="_blank" rel="noopener">View notebook <span>↗</span></a></p>
+    </article>
+
+  </section>
+
+  <footer>
+    <span>Jack Guirey · GIS portfolio</span>
+    <span>All products open in a new tab</span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var box = document.getElementById('lightbox');
+  var img = document.getElementById('lightbox-img');
+  document.querySelectorAll('.zoom').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      img.src = btn.dataset.full;
+      img.alt = btn.querySelector('img').alt;
+      if (box.showModal) box.showModal(); else box.setAttribute('open', '');
+    });
+  });
+  function close() { if (box.close) box.close(); else box.removeAttribute('open'); }
+  document.getElementById('lightbox-close').addEventListener('click', close);
+  box.addEventListener('click', function (e) { if (e.target === box) close(); });
+})();
+
+// ISA Boating Access Sites: map, record viewer, field completeness
+(function () {
+  var canvas = document.getElementById('bac-map');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var data = null, selected = 0, pts = [];
+  var LON0 = -90.7, LON1 = -82.1, LAT0 = 41.55, LAT1 = 47.65;
+  var K = Math.cos(44.6 * Math.PI / 180);
+
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+  function fmtVal(name, v) {
+    if (v === '' || v === null || v === undefined) return '';
+    if (name === 'VERIF_DATE' && /^\d{8}$/.test(v)) return v.slice(0, 4) + '-' + v.slice(4, 6) + '-' + v.slice(6);
+    if (name === 'REF_NUMBER') return Number(v).toFixed(6);
+    return String(v);
+  }
+
+  function showRecord(i) {
+    selected = i;
+    var row = data.rows[i];
+    document.getElementById('rec-title').textContent = row[0] || '(unnamed site)';
+    var dl = document.getElementById('rec-body');
+    dl.textContent = '';
+    data.fields.forEach(function (f, k) {
+      var dt = document.createElement('dt'); dt.textContent = f.name;
+      var dd = document.createElement('dd'); var v = fmtVal(f.name, row[k]);
+      dd.textContent = v === '' ? '(empty)' : v;
+      if (v === '' || v === 'N/A') dd.className = 'na';
+      dl.appendChild(dt); dl.appendChild(dd);
+    });
+    draw();
+  }
+
+  function draw() {
+    if (!data) return;
+    var dpr = window.devicePixelRatio || 1;
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // fit the extent into the canvas, keeping the cos(lat) aspect
+    var spanX = (LON1 - LON0) * K, spanY = LAT1 - LAT0;
+    var s = Math.min(w / spanX, h / spanY);
+    var ox = (w - spanX * s) / 2, oy = (h - spanY * s) / 2;
+    function px(lon) { return ox + (lon - LON0) * K * s; }
+    function py(lat) { return oy + (LAT1 - lat) * s; }
+
+    ctx.fillStyle = css('--lake'); ctx.fillRect(0, 0, w, h);
+    data.states.forEach(function (st) {
+      ctx.beginPath();
+      st.r.forEach(function (ring) {
+        ring.forEach(function (c, j) { j ? ctx.lineTo(px(c[0]), py(c[1])) : ctx.moveTo(px(c[0]), py(c[1])); });
+        ctx.closePath();
+      });
+      ctx.fillStyle = st.s === 'MI' ? css('--land') : css('--land-other');
+      ctx.fill('evenodd');
+      ctx.strokeStyle = css('--rule'); ctx.lineWidth = 1; ctx.stroke();
+    });
+
+    var dot = css('--water');
+    ctx.fillStyle = dot; ctx.globalAlpha = 0.75;
+    pts = data.rows.map(function (r) { return [px(r[12]), py(r[14])]; });
+    var rad = Math.max(1.6, Math.min(2.6, w / 280));
+    pts.forEach(function (p) { ctx.beginPath(); ctx.arc(p[0], p[1], rad, 0, 6.2832); ctx.fill(); });
+    ctx.globalAlpha = 1;
+
+    var p = pts[selected];
+    ctx.beginPath(); ctx.arc(p[0], p[1], rad + 4, 0, 6.2832);
+    ctx.fillStyle = css('--buoy'); ctx.fill();
+    ctx.lineWidth = 2; ctx.strokeStyle = css('--land'); ctx.stroke();
+
+    // map labels
+    ctx.fillStyle = css('--ink-soft');
+    ctx.font = 'italic 13px ' + css('--font-display');
+    ctx.fillText('Lake Superior', px(-87.3), py(47.25));
+    ctx.fillText('Lake Michigan', px(-87.45), py(43.3));
+    ctx.fillText('Lake Huron', px(-82.95), py(44.75));
+    ctx.font = '10px ' + css('--font-mono');
+    ctx.fillText(data.rows.length.toLocaleString() + ' boating access sites', 12, 18);
+  }
+
+  canvas.addEventListener('click', function (e) {
+    if (!pts.length) return;
+    var b = canvas.getBoundingClientRect();
+    var x = e.clientX - b.left, y = e.clientY - b.top, best = -1, bd = 144;
+    pts.forEach(function (p, i) { var d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y); if (d < bd) { bd = d; best = i; } });
+    if (best >= 0) showRecord(best);
+  });
+
+  fetch('data/bac.json').then(function (r) { return r.json(); }).then(function (d) {
+    data = d;
+    document.querySelector('[data-stat="count"]').textContent = d.rows.length.toLocaleString();
+    showRecord(0);
+  }).catch(function () {
+    document.getElementById('rec-title').textContent = 'Site data could not load';
+  });
+
+  if (window.ResizeObserver) new ResizeObserver(draw).observe(canvas); else window.addEventListener('resize', draw);
+  if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+</script>
+
+</body>
+</html>
